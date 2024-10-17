@@ -1,2 +1,0 @@
-#[doc(hidden)]
-mod main;

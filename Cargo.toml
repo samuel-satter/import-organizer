@@ -3,6 +3,10 @@ name = "import-organizer"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "imporg"
+path = "src/main.rs"
+
 [dependencies]
 criterion = "0.5.1"
 
@@ -10,6 +14,3 @@ criterion = "0.5.1"
 name = "import_organizer_benchmark"
 harness = false
 
-[lib]
-name = "import_organizer"
-path = "src/lib.rs"

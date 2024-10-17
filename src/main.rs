@@ -1,7 +1,28 @@
-use std::collections::{HashMap, HashSet};
-use std::io::{self, Read, Write};
+use std::{
+    collections::HashMap,
+    path::Path,
+    env,
+    fs,
+    io,
+};
 
-pub fn organize_rust_imports(code: &str) -> String {
+fn main() -> io::Result<()> {
+    let args: Vec<String> = env::args().collect();
+    let file_path = get_file_path(&args)?;
+    let content = fs::read_to_string(file_path)?;
+    let organized = organize_rust_imports(&content);
+    fs::write(file_path, organized)?;
+    println!("Imports organized successfully.");
+    Ok(())
+}
+
+fn get_file_path(args: &[String]) -> io::Result<&Path> {
+    args.get(1)
+        .map(Path::new)
+        .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "Usage: imporg <file>"))
+}
+
+fn organize_rust_imports(code: &str) -> String {
     let mut std_lib = Vec::new();
     let mut external = Vec::new();
     let mut internal = Vec::new();
@@ -67,16 +88,4 @@ pub fn organize_rust_imports(code: &str) -> String {
 
     organized.extend(non_import_lines.into_iter().map(String::from));
     organized.join("\n")
-}
-
-
-
-fn main() -> io::Result<()> {
-    let mut input = String::new();
-    io::stdin().read_to_string(&mut input)?;
-
-    let organized = organize_rust_imports(&input);
-    io::stdout().write_all(organized.as_bytes())?;
-
-    Ok(())
 }
