@@ -1,5 +1,4 @@
 use std::collections::{HashMap, HashSet};
-use std::io::{self, Read, Write};
 
 pub fn organize_rust_imports(code: &str) -> String {
     let mut imports = Vec::new();
@@ -68,16 +67,4 @@ pub fn organize_rust_imports(code: &str) -> String {
 
     organized.extend(non_import_lines);
     organized.join("\n")
-}
-
-
-
-fn main() -> io::Result<()> {
-    let mut input = String::new();
-    io::stdin().read_to_string(&mut input)?;
-
-    let organized = organize_rust_imports(&input);
-    io::stdout().write_all(organized.as_bytes())?;
-
-    Ok(())
 }
