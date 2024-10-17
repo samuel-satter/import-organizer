@@ -1,22 +1,6 @@
-use std::{collections::HashMap, env, fs, io, path::Path};
+use std::collections::HashMap;
 
-fn main() -> io::Result<()> {
-    let args: Vec<String> = env::args().collect();
-    let file_path = get_file_path(&args)?;
-    let content = fs::read_to_string(file_path)?;
-    let organized = organize_rust_imports(&content);
-    fs::write(file_path, organized)?;
-    println!("Imports organized successfully.");
-    Ok(())
-}
-
-fn get_file_path(args: &[String]) -> io::Result<&Path> {
-    args.get(1)
-        .map(Path::new)
-        .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "Usage: imporg <file>"))
-}
-
-fn organize_rust_imports(code: &str) -> String {
+pub fn organize_rust_imports(code: &str) -> String {
     #[derive(Default)]
     struct ImportGroups<'a> {
         std_lib: Vec<&'a str>,

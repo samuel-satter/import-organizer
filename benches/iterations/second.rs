@@ -36,7 +36,10 @@ pub fn organize_rust_imports(code: &str) -> String {
         let mut grouped = HashMap::new();
         for &import in imports {
             let (key, value) = import.split_at(import.find("::").unwrap_or(import.len()));
-            grouped.entry(key.to_string()).or_insert_with(HashSet::new).insert(value.trim_start_matches("::").to_string());
+            grouped
+                .entry(key.to_string())
+                .or_insert_with(HashSet::new)
+                .insert(value.trim_start_matches("::").to_string());
         }
         grouped
     }
@@ -45,18 +48,26 @@ pub fn organize_rust_imports(code: &str) -> String {
         if values.len() == 1 {
             format!("use {}{};", key, values.iter().next().unwrap())
         } else {
-            let items = values.iter()
+            let items = values
+                .iter()
                 .map(|s| s.as_str())
                 .collect::<Vec<_>>()
                 .join(",\n    ");
-            format!("use {}::{{
+            format!(
+                "use {}::{{
     {}
-}};", key, items)
+}};",
+                key, items
+            )
         }
     }
 
     let mut organized = Vec::new();
-    for (category, imports) in [("Standard library", &std_lib), ("External crate", &external), ("Internal crate", &internal)] {
+    for (category, imports) in [
+        ("Standard library", &std_lib),
+        ("External crate", &external),
+        ("Internal crate", &internal),
+    ] {
         if !imports.is_empty() {
             organized.push(format!("// {} imports", category));
             let grouped = group_imports(imports);
