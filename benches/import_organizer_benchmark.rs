@@ -1,7 +1,7 @@
 mod iterations;
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use crate::iterations::{first, second};
+use crate::iterations::{first, second, third};
 
 fn criterion_benchmark(c: &mut Criterion) {
     let input = r#"
@@ -21,6 +21,7 @@ fn some_function() {
 
     c.bench_function("first", |b| b.iter(|| first::organize_rust_imports(black_box(input))));
     c.bench_function("second", |b| b.iter(|| second::organize_rust_imports(black_box(input))));
+    c.bench_function("third", |b| b.iter(|| third::organize_rust_imports(input)));
 }
 
 criterion_group!(benches, criterion_benchmark);
